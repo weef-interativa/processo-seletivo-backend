@@ -51,3 +51,8 @@ Criar a branch e realizar o pullrequest utilizando o padrão do GitFlow https://
 
 A entrega do código deve ser feita em um pull request neste repositório.
 
+**Execução do teste:**
+
+Rodar o comando: ```docker-compose up -- build```
+
+Documentação em http://localhost:3000/doc
