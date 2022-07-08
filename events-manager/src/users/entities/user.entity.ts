@@ -1,4 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { Event } from "src/events/entities/event.entity";
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 
 @Entity()
 @Unique(['email'])
@@ -14,6 +15,9 @@ export class User extends BaseEntity {
 
     @Column({ nullable: false })
     password: string;
+
+    @OneToMany(() => Event, event => event.responsable)     
+    events: Event[];
 
     @CreateDateColumn()
     createdAt: Date;
