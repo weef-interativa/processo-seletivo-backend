@@ -1,5 +1,6 @@
+import { Image } from "src/images/entities/image.entity";
 import { User } from "src/users/entities/user.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Event extends BaseEntity {
@@ -32,6 +33,9 @@ export class Event extends BaseEntity {
 
     @ManyToOne(() => User, user => user.events)
     responsable: User;
+
+		@OneToMany(() => Image, image => image.event)
+    images: Image[];
 
     @CreateDateColumn()
     createdAt: Date;
