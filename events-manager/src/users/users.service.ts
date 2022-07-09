@@ -10,7 +10,7 @@ import * as bcryptjs from 'bcryptjs';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private readonly usersRepository: Repository<User>,
   ) {}
 
   create(createUserDto: CreateUserDto): Promise<User> {
@@ -28,6 +28,10 @@ export class UsersService {
   findOne(id: string): Promise<User> {
     return this.usersRepository.findOneBy({ id });
   }
+
+	findOneByEmailOrFail(email: string): Promise<User> {
+		return this.usersRepository.findOneByOrFail({ email })
+	}
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.usersRepository.findOneBy({ id });

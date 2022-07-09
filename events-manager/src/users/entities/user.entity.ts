@@ -16,7 +16,7 @@ export class User extends BaseEntity {
     @Column({ nullable: false })
     password: string;
 
-    @OneToMany(() => Event, event => event.responsable)     
+    @OneToMany(() => Event, event => event.responsable)
     events: Event[];
 
     @CreateDateColumn()

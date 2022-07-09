@@ -9,7 +9,7 @@ import { Event } from 'src/events/entities/event.entity';
   imports: [TypeOrmModule.forFeature([User, Event])],
   controllers: [UsersController],
   providers: [UsersService],
-  exports: [TypeOrmModule]
+  exports: [TypeOrmModule, UsersService]
 })
 
 export class UsersModule {}
