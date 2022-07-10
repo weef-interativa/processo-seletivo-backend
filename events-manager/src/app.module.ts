@@ -5,9 +5,10 @@ import { UsersModule } from './users/users.module';
 import { EventsModule } from './events/events.module';
 import { AuthModule } from './auth/auth.module';
 import { ImagesModule } from './images/images.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeOrmConfig), UsersModule, EventsModule, AuthModule, ImagesModule],
+  imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot(typeOrmConfig), UsersModule, EventsModule, AuthModule, ImagesModule],
   controllers: [],
   providers: [],
 })
