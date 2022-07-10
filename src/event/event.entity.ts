@@ -12,7 +12,7 @@ export class Event extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false, type: 'date'})
+  @Column({ type: 'timestamp' })
   eventDate: Date;
 
   @Column({ nullable: false, type: 'varchar', length: 200 })
@@ -35,6 +35,9 @@ export class Event extends BaseEntity {
 
   @Column({ nullable: false, type: 'varchar', length: 200 })
   email: string;
+
+  @Column({ nullable: false, type: 'varchar', length: 200 })
+  password: string;
 
   @Column({ type: 'bigint' })
   phone: string;
