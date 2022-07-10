@@ -14,23 +14,23 @@ export class EventsController {
     return this.eventsService.create(createEventDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.eventsService.findAll();
-  // }
+  @Get()
+  findAll() {
+    return this.eventsService.findAll();
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.eventsService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.eventsService.findOne(id);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
-  //   return this.eventsService.update(+id, updateEventDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
+    return this.eventsService.update(id, updateEventDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.eventsService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.eventsService.remove(id);
+  }
 }

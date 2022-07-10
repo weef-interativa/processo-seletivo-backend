@@ -13,7 +13,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
   imports: [TypeOrmModule.forFeature([User]), PassportModule, UsersModule, JwtModule.register({
     privateKey: 'wXjYjNR2mmv2l31gMc/X6f7qCVs7oVZJiHBJhhLOjEs=',
     signOptions: {
-			expiresIn: '60s'
+			expiresIn: '2h'
     },
   })],
   providers: [AuthService, LocalStrategy, JwtStrategy],

@@ -11,7 +11,7 @@ export class EventsService {
   constructor(
     @InjectRepository(Event)
     private eventsRepository: Repository<Event>,
-    
+
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
@@ -33,19 +33,30 @@ export class EventsService {
     return this.eventsRepository.save(event)
   }
 
-  // findAll() {
-  //   return `This action returns all events`;
-  // }
+  findAll() {
+    return this.eventsRepository.find({ relations: ["responsable", "images"] });
+  }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} event`;
-  // }
+  findOne(id: string) {
+    return this.eventsRepository.findOne({ where: { id }, relations: ["responsable", "images"] });
+  }
 
-  // update(id: number, updateEventDto: UpdateEventDto) {
-  //   return `This action updates a #${id} event`;
-  // }
+  async update(id: string, updateEventDto: UpdateEventDto) {
+		const event = await this.eventsRepository.findOneBy({ id })
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} event`;
-  // }
+    event.address = updateEventDto.address
+    event.city = updateEventDto.city
+    event.complement = updateEventDto.complement
+    event.email = updateEventDto.email
+    event.eventDate = updateEventDto.eventDate
+    event.fone = updateEventDto.fone
+    event.name = updateEventDto.name
+    event.state = updateEventDto.state
+
+    return this.eventsRepository.save(event)
+  }
+
+  async remove(id: string) {
+    await this.eventsRepository.delete(id)
+  }
 }
