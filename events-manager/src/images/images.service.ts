@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from 'src/events/entities/event.entity';
 import { Repository } from 'typeorm';
-import { CreateImageDto } from './dtos/create-image.dto';
+import { SaveImagePathDto } from './dtos/save-image-path.dto';
 import { Image } from './entities/image.entity';
 
 @Injectable()
@@ -15,14 +15,13 @@ export class ImagesService {
     private readonly eventsRepository: Repository<Event>,
   ) {}
 
-	async create(createImageDto: CreateImageDto) {
+	async create(saveImagePathDto: SaveImagePathDto) {
 		const image = this.imagesRepository.create()
 
-		const id = createImageDto.eventId
-		const event = await this.eventsRepository.findOneBy({ id })
-		if(!event) throw new Error("Evento não encontrado. Impossível salvar a imagem.")
+		const id = saveImagePathDto.eventId
+		const event = await this.eventsRepository.findOneByOrFail({ id })
 		image.event = event
-		image.path = createImageDto.path
+		image.path = saveImagePathDto.path
 
 		return this.imagesRepository.save(image)
 	}

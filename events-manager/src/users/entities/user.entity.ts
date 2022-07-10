@@ -1,3 +1,4 @@
+import { Exclude, instanceToPlain } from "class-transformer";
 import { Event } from "src/events/entities/event.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 
@@ -14,6 +15,7 @@ export class User extends BaseEntity {
     name: string;
 
     @Column({ nullable: false })
+		@Exclude({ toPlainOnly: true })
     password: string;
 
     @OneToMany(() => Event, event => event.responsable)
@@ -24,4 +26,8 @@ export class User extends BaseEntity {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+		toJSON() {
+			return instanceToPlain(this);
+		}
 }
