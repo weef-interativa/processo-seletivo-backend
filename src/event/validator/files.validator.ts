@@ -13,7 +13,7 @@ export class FilesValidator extends FileValidator<Types> {
   isValid(files: Express.Multer.File[]): boolean | Promise<boolean> {
     const checkFiles = files.filter((f) => {
       const { originalname } = f;
-      const extension = originalname.substring(originalname.indexOf('.'));
+      const extension = originalname.substring(originalname.indexOf('.') + 1);
 
       return this.validationOptions.types.indexOf(extension) !== -1;
     });
@@ -22,8 +22,6 @@ export class FilesValidator extends FileValidator<Types> {
   }
 
   buildErrorMessage(file: any): string {
-    return `all files not match types ${this.validationOptions.types.join(
-      ', ',
-    )}`;
+    return `all files not match types ${this.validationOptions.types.join(', ')}`;
   }
 }

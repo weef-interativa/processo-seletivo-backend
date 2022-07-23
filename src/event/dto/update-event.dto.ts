@@ -1,10 +1,13 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsDate, IsString } from 'class-validator';
+import { IsDate, IsEmail, IsString } from 'class-validator';
 import { CreateEventDto } from './create-event.dto';
 
 export class UpdateEventDto extends PartialType(CreateEventDto) {
   @IsDate()
   date?: Date;
+
+  @IsEmail()
+  email?: string;
 
   @IsString()
   city?: string;

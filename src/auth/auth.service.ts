@@ -4,16 +4,12 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import * as argon from 'argon2';
-import { DatabaseService } from 'src/database/database.service';
+import { DatabaseService } from '../database/database.service';
 import { AuthDto } from './dto';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private database: DatabaseService,
-    private jwt: JwtService,
-    private config: ConfigService,
-  ) {}
+  constructor(private database: DatabaseService, private jwt: JwtService, private config: ConfigService) {}
 
   async createUser(auth: AuthDto) {
     const hash = await argon.hash(auth.password);
@@ -40,10 +36,10 @@ export class AuthService {
     const user = await this.database.user.findUnique({
       where: { email: auth.email },
     });
-    if (user === undefined) {
+    if (user === null) {
       throw new ForbiddenException('credentials not found');
     }
-    if (!argon.verify(user.hash, auth.email)) {
+    if (!argon.verify(user.hash, auth.password)) {
       throw new ForbiddenException('credentials not found');
     }
 

@@ -1,8 +1,15 @@
-import { Optional } from '@nestjs/common';
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, isString, IsString } from 'class-validator';
+import { IsDate, IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateEventDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
   @Type(() => Date)
   @IsNotEmpty()
   @IsDate()
