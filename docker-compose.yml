@@ -1,16 +1,5 @@
 version: '3'
 services:
-  node:
-    container_name: node
-    image: node:latest
-    working_dir: '/app'
-    expose:
-      - "3000"
-    ports:
-      - "${APP_PORT}:3000"
-    command: ["npm", "run", "start:dev"]
-    volumes:
-      - .:/app
   database:
     container_name: database
     image: postgres:13
@@ -20,3 +9,23 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: event
+    volumes:
+      - .:/app
+    working_dir: '/app'
+
+  node:
+    image: node:latest
+    # build: build
+    container_name: node
+    working_dir: '/app'
+    expose:
+      - "3000"
+    ports:
+      - "${APP_PORT}:3000"
+    command: ["npm", "run", "execute"]
+    # command: ["./init.sh"]
+    # command: bash -c "npm install && npx prisma migrate deploy && npm run build && npm run start:prod"
+    volumes:
+      - .:/app
+    depends_on:
+      - "database"
