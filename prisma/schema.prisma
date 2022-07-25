@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  email String @unique
+  hash String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("users")
+}
+
+model Event {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+  date DateTime
+  city String
+  state String
+  address String
+  complement String?
+  email String
+  
+  responsible String
+  phone String
+
+  images Image[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map("events")
+}
+
+model Image {
+  id Int @id @default(autoincrement())
+
+  name String
+  path String
+
+  eventId Int
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@map("images")
+}
