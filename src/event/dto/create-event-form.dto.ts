@@ -17,8 +17,11 @@ export const CreateEventFormDto =
           responsible: { type: 'string' },
           phone: { type: 'string' },
           images: {
-            type: 'string',
-            format: 'binary',
+            type: 'array',
+            items: {
+              type: 'string',
+              format: 'binary',
+            },
           },
         },
         required: ['name', 'email', 'date', 'city', 'state', 'address', 'responsible', 'phone', 'images'],

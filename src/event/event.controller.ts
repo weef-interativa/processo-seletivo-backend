@@ -28,7 +28,6 @@ import {
 } from '@nestjs/swagger';
 import { CreateEventFormDto } from './dto/create-event-form.dto';
 import { UpdateEventFormDto } from './dto/update-event-form.dto';
-import { Event } from '@prisma/client';
 import { Response } from 'express';
 
 @ApiTags('events')

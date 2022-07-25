@@ -16,8 +16,11 @@ export const UpdateEventFormDto =
           responsible: { type: 'string' },
           phone: { type: 'string' },
           images: {
-            type: 'string',
-            format: 'binary',
+            type: 'array',
+            items: {
+              type: 'string',
+              format: 'binary',
+            },
           },
         },
       },
