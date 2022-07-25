@@ -22,8 +22,9 @@ export class UpdateEventDto extends PartialType(CreateEventDto) {
   email?: string;
 
   @ApiPropertyOptional()
-  @IsNotEmpty()
   @IsString()
+  @IsOptional()
+  @IsNotEmpty()
   city?: string;
 
   @ApiPropertyOptional()
