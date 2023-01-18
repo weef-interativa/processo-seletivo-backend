@@ -38,4 +38,8 @@ export class AuthService {
   async validate(credentials: SignInDTO) {
     return (await this.usersService.getUserByCredentials(credentials)) || null;
   }
+
+  async getUser(id: string) {
+    return await this.usersService.findOne(id);
+  }
 }

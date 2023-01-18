@@ -1,7 +1,16 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SkipJwt } from './decorators/skip-jwt.decorator';
+import GetMeDTO from './dto/get-me.dto';
 import SignInDTO from './dto/signin.dto';
 import SignUpDTO from './dto/signup.dto';
 
@@ -20,5 +29,11 @@ export class AuthController {
   @Post('/signup')
   signUp(@Body() credentials: SignUpDTO) {
     return this.authService.signUp(credentials);
+  }
+
+  @ApiBearerAuth()
+  @Get('/me')
+  async getMe(@Request() req) {
+    return (await this.authService.getUser(req.user.id)) as GetMeDTO;
   }
 }
