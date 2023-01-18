@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+
+  weef-events:
+    build:
+      context: ./
+      target: dependencies
+    env_file:
+      - .env
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - db-network
+    depends_on:
+      - weef-database
+    ports:
+      - ${BACKEND_PORT}:3000
+    command: npm run start:dev
+
+  weef-database:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./.docker/dbdata:/var/lib/postgresql/data/pgdata
+    networks:
+      - db-network
+
+networks:
+  db-network:
+    driver: bridge
