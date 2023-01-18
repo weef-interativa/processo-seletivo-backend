@@ -7,13 +7,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SkipJwt } from './decorators/skip-jwt.decorator';
 import GetMeDTO from './dto/get-me.dto';
 import SignInDTO from './dto/signin.dto';
 import SignUpDTO from './dto/signup.dto';
 
+@ApiTags('auth')
 @Controller('/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -34,6 +35,9 @@ export class AuthController {
   @ApiBearerAuth()
   @Get('/me')
   async getMe(@Request() req) {
-    return (await this.authService.getUser(req.user.id)) as GetMeDTO;
+    return {
+      id: req.user.id,
+      username: req.user.username,
+    } as GetMeDTO;
   }
 }
