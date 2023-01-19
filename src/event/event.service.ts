@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import EventImageDTO from './dto/create-event-image.dto';
 import CreateEventDTO from './dto/create-event.dto';
 import UpdateEventDTO from './dto/update-event.dto';
 import EventImage from './entities/event-image.entity';
