@@ -1,4 +1,4 @@
-import User from 'src/user/user.entity';
+import User from '../../user/user.entity';
 import {
   Column,
   Entity,
@@ -53,4 +53,32 @@ export default class Event {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  constructor(event: Partial<Event>) {
+    this.id = event?.id;
+
+    this.eventDate = event?.eventDate;
+
+    this.name = event?.name;
+
+    this.city = event?.city;
+
+    this.state = event?.state;
+
+    this.address = event?.address;
+
+    this.complement = event?.complement;
+
+    this.email = event?.email;
+
+    this.phone = event?.phone;
+
+    this.images = event?.images;
+
+    this.responsible = event?.responsible;
+
+    this.updatedAt = event?.updatedAt;
+
+    this.createdAt = event?.createdAt;
+  }
 }
