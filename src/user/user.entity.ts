@@ -1,9 +1,11 @@
+import Event from 'src/event/entities/event.entity';
 import {
   Column,
   Entity,
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('users')
@@ -18,6 +20,9 @@ export default class User {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Event, (event) => event.responsible)
+  events: Event[];
 
   @UpdateDateColumn()
   updatedAt: Date;
