@@ -8,11 +8,13 @@ import {
   Patch,
   Post,
   Request,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import CreateEventDTO from './dto/create-event.dto';
 import UpdateEventDTO from './dto/update-event.dto';
 import { EventsService } from './event.service';
+import { IsEventOwner } from './guards/is-event-owner.guard';
 
 @ApiTags('events')
 @ApiBearerAuth()
@@ -35,11 +37,13 @@ export class EventsController {
     return await this.eventService.create(req.user.id, data);
   }
 
+  @UseGuards(IsEventOwner)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() data: UpdateEventDTO) {
     return await this.eventService.update(id, data);
   }
 
+  @UseGuards(IsEventOwner)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     const isDeleted = await this.eventService.delete(id);

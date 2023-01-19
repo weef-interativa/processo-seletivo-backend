@@ -21,7 +21,10 @@ export class EventsService {
   }
 
   async findOne(id: string) {
-    return await this.eventRepository.findOneOrFail({ where: { id } });
+    return await this.eventRepository.findOneOrFail({
+      where: { id },
+      cache: 60000,
+    });
   }
 
   async create(userId: string, data: CreateEventDTO) {
