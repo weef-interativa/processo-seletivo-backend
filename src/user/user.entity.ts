@@ -1,4 +1,4 @@
-import Event from 'src/event/entities/event.entity';
+import Event from '../event/entities/event.entity';
 import {
   Column,
   Entity,
@@ -29,4 +29,18 @@ export default class User {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  constructor(user: Partial<User>) {
+    this.id = user?.id;
+
+    this.username = user?.username;
+
+    this.password = user?.password;
+
+    this.events = user?.events;
+
+    this.updatedAt = user?.updatedAt;
+
+    this.createdAt = user?.createdAt;
+  }
 }
