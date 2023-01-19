@@ -45,7 +45,7 @@ export default class Event {
   })
   images: EventImage[];
 
-  @ManyToOne(() => User, (user) => user.events)
+  @ManyToOne(() => User, (user) => user.events, { lazy: true })
   responsible: User;
 
   @UpdateDateColumn()

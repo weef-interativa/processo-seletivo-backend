@@ -21,7 +21,10 @@ export class EventsService {
   }
 
   async findOne(id: string) {
-    return await this.eventRepository.findOneOrFail({ where: { id } });
+    return await this.eventRepository.findOneOrFail({
+      where: { id },
+      cache: 60000,
+    });
   }
 
   async create(userId: string, data: CreateEventDTO) {
@@ -32,6 +35,13 @@ export class EventsService {
   }
 
   async update(id: string, data: UpdateEventDTO) {
+    if (data.images) {
+      const currentImages = await this.eventImageRepository.find({
+        where: { event: { id } },
+      });
+      data.images = data.images.concat(currentImages);
+    }
+
     return await this.eventRepository.save({
       id,
       ...data,
