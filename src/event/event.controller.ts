@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import CreateEventDTO from './dto/create-event.dto';
+import GetEventDTO from './dto/get-event.dto';
 import UpdateEventDTO from './dto/update-event.dto';
 import { EventsService } from './event.service';
 import { IsEventOwner } from './guards/is-event-owner.guard';
@@ -24,12 +25,14 @@ export class EventsController {
 
   @Get()
   async findAll() {
-    return await this.eventService.findAll();
+    return (await this.eventService.findAll()).map(
+      (event) => new GetEventDTO(event),
+    );
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.eventService.findOne(id);
+    return new GetEventDTO(await this.eventService.findOne(id));
   }
 
   @Post()

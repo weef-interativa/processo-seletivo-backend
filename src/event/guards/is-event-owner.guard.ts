@@ -12,7 +12,7 @@ export class IsEventOwner implements CanActivate {
     const eventId = request.params.id;
 
     const event = await this.eventService.findOne(eventId);
-    const owner = await event.responsible;
+    const owner = event.responsible;
 
     return owner.id === userId;
   }
