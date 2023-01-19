@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import EventImageDTO from './dto/create-event-image.dto';
 import CreateEventDTO from './dto/create-event.dto';
 import UpdateEventDTO from './dto/update-event.dto';
 import EventImage from './entities/event-image.entity';
@@ -32,6 +33,13 @@ export class EventsService {
   }
 
   async update(id: string, data: UpdateEventDTO) {
+    if (data.images) {
+      const currentImages = await this.eventImageRepository.find({
+        where: { event: { id } },
+      });
+      data.images = data.images.concat(currentImages);
+    }
+
     return await this.eventRepository.save({
       id,
       ...data,
