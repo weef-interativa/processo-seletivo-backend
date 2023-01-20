@@ -9,7 +9,7 @@ import { HttpException } from '@nestjs/common/exceptions';
 import { HttpStatus } from '@nestjs/common/enums';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -21,13 +21,14 @@ export class UsersService {
       password: await bcrypt.hash(createUserDto.password, 10),
     };
 
-    if (createUserDto.username) {
+    const userAlreadyExists = await this.findByUsername(createUserDto.username);
+    if (userAlreadyExists) {
       throw new HttpException(
-        'Username already exists',
+        'Username already exists.',
         HttpStatus.BAD_REQUEST,
       );
     }
-    const user = this.userRepository.save(data);
+    const user = await this.userRepository.save(data);
     return user;
   }
 
@@ -39,5 +40,10 @@ export class UsersService {
   findOne(id: number) {
     const user = this.userRepository.findOneBy({ id });
     return instanceToPlain(user);
+  }
+
+  findByUsername(username: string) {
+    const user = this.userRepository.findOneBy({ username });
+    return user;
   }
 }
