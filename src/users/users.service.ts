@@ -4,9 +4,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { instanceToPlain } from 'class-transformer';
 import { HttpException } from '@nestjs/common/exceptions';
 import { HttpStatus } from '@nestjs/common/enums';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -15,13 +15,14 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto) {
     const data = {
       ...createUserDto,
       password: await bcrypt.hash(createUserDto.password, 10),
     };
 
     const userAlreadyExists = await this.findByUsername(createUserDto.username);
+
     if (userAlreadyExists) {
       throw new HttpException(
         'Username already exists.',
@@ -29,21 +30,21 @@ export class UserService {
       );
     }
     const user = await this.userRepository.save(data);
-    return user;
+    return plainToInstance(User, user);
   }
 
-  findAll() {
+  findAll(): User {
     const users = this.userRepository.find();
-    return instanceToPlain(users);
+    return plainToInstance(User, users);
   }
 
   findOne(id: number) {
     const user = this.userRepository.findOneBy({ id });
-    return instanceToPlain(user);
+    return plainToInstance(User, user);
   }
 
-  findByUsername(username: string) {
-    const user = this.userRepository.findOneBy({ username });
+  async findByUsername(username: string) {
+    const user = await this.userRepository.findOneBy({ username });
     return user;
   }
 }
