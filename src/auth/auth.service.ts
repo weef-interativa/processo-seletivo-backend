@@ -1,9 +1,9 @@
+import { UserService } from './../users/users.service';
 import { IUserPayload } from './models/user.payload';
 import { User } from './../users/entities/user.entity';
 import { HttpStatus } from '@nestjs/common/enums';
 import { instanceToPlain } from 'class-transformer';
 import { Injectable } from '@nestjs/common';
-import { UserService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { HttpException } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt/dist/jwt.service';
