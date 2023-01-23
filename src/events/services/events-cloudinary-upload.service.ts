@@ -1,4 +1,3 @@
-import { CreateEventImageDto } from './../dto/create-event-image.dto';
 import { Injectable } from '@nestjs/common';
 import { unlink } from 'fs';
 import { v2 as cloudinary } from 'cloudinary';
@@ -9,8 +8,8 @@ export class EventCloudinaryService {
   async uploadImageToCloudinary(
     files: Array<Express.Multer.File>,
     id: string,
-  ): Promise<CreateEventImageDto[]> {
-    const eventImagesDTO: CreateEventImageDto[] = [];
+  ): Promise<Partial<EventImage>[]> {
+    const eventImagesDTO: Partial<EventImage>[] = [];
 
     for (let i = 0; i < files.length; i += 1) {
       const upload = await cloudinary.uploader.upload(
