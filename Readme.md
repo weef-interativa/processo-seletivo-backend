@@ -1,53 +1,17 @@
-**Desafio:**
+## Desafio - Gerenciador de eventos
 
-Criar uma listagem de eventos com Node.js e framework Nest https://nestjs.com/
+- Para iniciar a aplicação, é necessário: Criar um .env e preencher os dados de acordo com o .env example, e usar a CLOUDINARY_URL passada por e-mail.
 
+- Para executar os testes (e2e) da aplicação utilize o comando (OBS: os testes estão rodando no db local - não foi terminado a configuração para criação dos dados num banco de dados da memória)
 
-**Tarefas:**
+```
+yarn test
+```
 
-- Criar um projeto utilizando o Nestjs e banco de dados PostgreSQL;
+- A documentação da API se encontra no link: http://localhost:3005/api
 
-- Criar uma seção de autenticação com Login / Senha, gerar um JWT e disponibilziar no swagger;
+- Para o **upload de imagens** dos eventos, foi utilizado a API do
+  <a href="https://cloudinary.com/">Cloudinary</a> para armazenar as imagens, retornando um link que é armazenado no banco de dados do projeto;
 
-- Criar um CRUD para a área de eventos com rota autenticada (Bearer Token) e disponibilizar no swagger;
-
-Dados do evento:
-
-- Data do evento
-
-- Nome do evento
-
-- Responsável
-
-- Cidade
-
-- Estado
-
-- Endereço
-
-- Complemento
-
-- E-mail
-
-- Telefone
-
-- Imagens
-
-
-**Dicas:**
-
-Utilize a documentação oficial do NestJS. 
-
-
-**Diferenciais:**
-
-Utilizar o Docker para montar os servicos Node e PostreSQL;
-
-Escrever os commits utilizando o padrão Git Commit Guidelines https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines
-
-Criar a branch e realizar o pullrequest utilizando o padrão do GitFlow https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow#:~:text=Gitflow%20is%20a%20legacy%20Git,software%20development%20and%20DevOps%20practices.
-
-**Entrega do teste:**
-
-A entrega do código deve ser feita em um pull request neste repositório.
-
+- Diagrama de entidades da aplicação:
+- <img src="./Entity-Relation-Ship-Diagram-(DER).jpg" >
