@@ -39,7 +39,14 @@ export class UserService {
   }
 
   findOne(id: number) {
-    const user = this.userRepository.findOneBy({ id });
+    const user = this.userRepository.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        events: true,
+      },
+    });
     return plainToInstance(User, user);
   }
 
