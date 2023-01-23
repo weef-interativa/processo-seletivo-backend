@@ -21,8 +21,8 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('events')
     .addBearerAuth()
-
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document, {
     swaggerOptions: {
@@ -31,6 +31,6 @@ async function bootstrap() {
     },
   });
 
-  await app.listen(3005);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
