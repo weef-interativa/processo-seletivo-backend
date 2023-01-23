@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -40,7 +40,7 @@ export class EventAddress {
   @Column()
   number: number;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @Column({ nullable: true })
   complement: string;
 

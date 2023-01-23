@@ -1,11 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
-  IsDateString,
   IsEmail,
   IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
+  MinDate,
 } from 'class-validator';
 
 export class CreateEventDto {
@@ -16,10 +17,11 @@ export class CreateEventDto {
   name: string;
 
   @ApiProperty({
-    example: '2020-07-13 18:00:00.000',
-    description: 'The date should be in ISO 8601 format ',
+    example: '2023-07-13 18:00:00.000',
+    description: "This field doesn't accept old dates.",
   })
-  @IsDateString()
+  @Transform(({ value }) => new Date(value))
+  @MinDate(new Date())
   eventDate: Date;
 
   @ApiProperty({
@@ -72,7 +74,7 @@ export class CreateEventDto {
   @IsNumber()
   number: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'Near the coffee shop',
   })
   @IsOptional()
