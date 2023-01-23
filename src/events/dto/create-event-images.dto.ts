@@ -1,7 +1,6 @@
-import { UpdateImagesDTO } from './update-images.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
-export class CreateEventsImages extends UpdateImagesDTO {
+export class CreateEventsImages {
   @ApiPropertyOptional({
     type: 'array',
     items: {
@@ -9,7 +8,6 @@ export class CreateEventsImages extends UpdateImagesDTO {
       format: 'binary',
     },
     description: 'This field accepts images with JPG/JPEG/PNG and GIFT format',
-    example: 'image.png',
   })
   files: any[];
 }

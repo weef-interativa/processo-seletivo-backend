@@ -20,7 +20,11 @@ export class EventsAddressService {
   ): Promise<EventAddress | undefined> {
     let eventAddress: EventAddress;
     if (isTheSameAddress) {
-      await this.checkAddressAvailability(eventToUpdate.address, eventDate);
+      await this.checkAddressAvailability(
+        eventToUpdate.address,
+        eventDate,
+        true,
+      );
     } else {
       eventAddress = await this.addressAlreadyExists(addressSent, eventDate);
 
@@ -59,10 +63,17 @@ export class EventsAddressService {
   async checkAddressAvailability(
     address: Omit<EventAddress, 'createdAt' | 'updatedAt' | 'complement'>,
     eventDate: Date,
+    isUpdate = false,
   ) {
-    const hasAnEventInThisDate = address.events.some((event) =>
+    const eventsIntThisDate = address.events.filter((event) =>
       moment(event.eventDate).isSame(eventDate, 'date'),
     );
+    let hasAnEventInThisDate = eventsIntThisDate.length > 0;
+
+    if (isUpdate) {
+      hasAnEventInThisDate = eventsIntThisDate.length > 1;
+    }
+
     if (hasAnEventInThisDate) {
       throw new HttpException(
         'There is already an event scheduled at this location on this date.',

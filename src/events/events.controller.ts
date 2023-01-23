@@ -24,6 +24,7 @@ import {
 } from '@nestjs/swagger';
 import { CurrentUser } from './../auth/decorators/current-user.decorator';
 import { User } from './../users/entities/user.entity';
+import { CreateEventsImages } from './dto/create-event-images.dto';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { UpdateImagesDTO } from './dto/update-images.dto';
@@ -74,12 +75,13 @@ export class EventsController {
   }
 
   @Post(':id/images')
+  @UseGuards(ValidateIsOwnerGuard)
   @ApiCreatedResponse({ description: 'Add images to an event' })
   @ApiOperation({ summary: 'Add images to an event' })
   @UseInterceptors(AnyFilesInterceptor(uploadConfig))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    type: UpdateImagesDTO,
+    type: CreateEventsImages,
   })
   async addFiles(
     @UploadedFiles() files: Array<Express.Multer.File>,
@@ -92,6 +94,7 @@ export class EventsController {
   }
 
   @Patch(':id/images')
+  @UseGuards(ValidateIsOwnerGuard)
   @ApiCreatedResponse({ description: 'Update images from an event' })
   @ApiOperation({ summary: 'Update (add and delete) images from an event' })
   @UseInterceptors(AnyFilesInterceptor(uploadConfig))

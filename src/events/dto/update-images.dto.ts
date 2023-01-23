@@ -8,9 +8,8 @@ export class UpdateImagesDTO {
       format: 'binary',
     },
     description: 'This field accepts images with JPG/JPEG/PNG and GIFT format',
-    example: 'image.png',
   })
-  files: any[];
+  files: Express.Multer.File[];
 
   @ApiPropertyOptional({
     example: {
