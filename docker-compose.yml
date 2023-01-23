@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  api:
+    container_name: api
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=12345
+      - DB=events_db
+      - DB_USER=postgres
+      - SECRET_KEY=segredu
+      - PORT=3000
+    depends_on:
+      db:
+        condition: service_healthy
+    command: bash -c "yarn && yarn start:dev"
+    volumes:
+      - .:/app
+      - /app/node_modules/bcrypt/
+
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    ports:
+      - 5431:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=events_db
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d events_db']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
