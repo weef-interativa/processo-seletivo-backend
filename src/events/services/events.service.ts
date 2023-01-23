@@ -5,6 +5,7 @@ import { CreateEventDto } from '../dto/create-event.dto';
 import { UpdateEventDto } from '../dto/update-event.dto';
 import { Event } from '../entities/event.entity';
 import { EventAddress } from '../entities/event_address.entity';
+import { IEventQuery } from '../models/event-query';
 import { User } from './../../users/entities/user.entity';
 import { EventsAddressService } from './events-address.service';
 import { EventCloudinaryService } from './events-cloudinary-upload.service';
@@ -76,8 +77,21 @@ export class EventsService {
     return eventFound;
   }
 
-  async findAll() {
+  async findAll(queries: IEventQuery) {
     const events = await this.eventRepository.find({
+      where: {
+        email: queries.email,
+        phone: queries.phone,
+        responsible: queries.responsible,
+        name: queries.name,
+        address: {
+          zipCode: queries.zipCode,
+          state: queries.state,
+          city: queries.city,
+          street: queries.street,
+          number: queries.number,
+        },
+      },
       relations: {
         images: true,
         address: true,

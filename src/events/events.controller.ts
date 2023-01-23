@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
@@ -17,6 +18,7 @@ import {
   ApiConsumes,
   ApiCreatedResponse,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -27,6 +29,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { UpdateImagesDTO } from './dto/update-images.dto';
 import { ValidateIsOwnerGuard } from './guards/validate-is-owner.guard';
 import { uploadConfig } from './helpers/upload-config';
+import { EventQueryDTO, IEventQuery } from './models/event-query';
 import { EventCloudinaryService } from './services/events-cloudinary-upload.service';
 import { EventsImageService } from './services/events-images.service';
 import { EventsService } from './services/events.service';
@@ -130,8 +133,11 @@ export class EventsController {
     description: 'This route requires authorization to access.',
   })
   @ApiOperation({ summary: 'List all events' })
-  findAll() {
-    return this.eventsService.findAll();
+  @ApiQuery({
+    type: EventQueryDTO,
+  })
+  findAll(@Query() query: IEventQuery) {
+    return this.eventsService.findAll(query);
   }
 
   @Get(':id')
