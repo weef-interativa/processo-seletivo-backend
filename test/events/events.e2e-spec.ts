@@ -248,7 +248,7 @@ describe('/events', () => {
     expect(responseTwo.body).toHaveLength(0);
   });
 
-  it('DELETE /events/:id - Should be able to delete an event if is the owner', async () => {
+  it('DELETE /events/:id - Should not be able to delete an event if is not the owner', async () => {
     const resToken = await request(app.getHttpServer())
       .post('/login')
       .send(mockedUserTwo);
