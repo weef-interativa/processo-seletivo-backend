@@ -1,4 +1,3 @@
-import { ValidateIsOwnerGuard } from './guards/validate-is-owner.guard';
 import {
   Body,
   Controller,
@@ -10,15 +9,8 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { CurrentUser } from './../auth/decorators/current-user.decorator';
-import { User } from './../users/entities/user.entity';
-import { CreateEventDto } from './dto/create-event.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
-import { EventsService } from './events.service';
 import { UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { EventCloudinaryService } from './services/events-cloudinary-upload.service';
-import { uploadConfig } from './helpers/upload-config';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -28,14 +20,23 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { FilesUploadDto } from './dto/file-upload.dto';
-import { EventSwaggerPost, EventSwaggerList } from './swagger/event.swagger';
+import { CurrentUser } from './../auth/decorators/current-user.decorator';
+import { User } from './../users/entities/user.entity';
+import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
+import { UpdateImagesDTO } from './dto/update-images.dto';
+import { ValidateIsOwnerGuard } from './guards/validate-is-owner.guard';
+import { uploadConfig } from './helpers/upload-config';
+import { EventCloudinaryService } from './services/events-cloudinary-upload.service';
+import { EventsImageService } from './services/events-images.service';
+import { EventsService } from './services/events.service';
 import {
-  BadRequestSwaggerUnauthorized,
   BadRequestSwaggerConflict,
-  BadRequestSwaggerNotFound,
   BadRequestSwaggerForbiddenAccess,
+  BadRequestSwaggerNotFound,
+  BadRequestSwaggerUnauthorized,
 } from './swagger/bad-request.swagger';
+import { EventSwaggerList, EventSwaggerPost } from './swagger/event.swagger';
 
 @Controller('events')
 @ApiTags('events')
@@ -43,6 +44,7 @@ import {
 export class EventsController {
   constructor(
     private readonly eventsService: EventsService,
+    private readonly eventsImageService: EventsImageService,
     private readonly eventCloudinaryService: EventCloudinaryService,
   ) {}
 
@@ -69,27 +71,46 @@ export class EventsController {
   }
 
   @Post(':id/images')
-  @ApiCreatedResponse({ description: 'Create an event' })
-  @ApiOperation({ summary: 'Add new images to an event' })
+  @ApiCreatedResponse({ description: 'Add images to an event' })
+  @ApiOperation({ summary: 'Add images to an event' })
   @UseInterceptors(AnyFilesInterceptor(uploadConfig))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    type: FilesUploadDto,
+    type: UpdateImagesDTO,
+  })
+  async addFiles(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Param('id') id: string,
+  ) {
+    const eventImagesDTO =
+      await this.eventCloudinaryService.uploadImageToCloudinary(files, id);
+
+    return this.eventsImageService.create(eventImagesDTO, +id);
+  }
+
+  @Patch(':id/images')
+  @ApiCreatedResponse({ description: 'Update images from an event' })
+  @ApiOperation({ summary: 'Update (add and delete) images from an event' })
+  @UseInterceptors(AnyFilesInterceptor(uploadConfig))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: UpdateImagesDTO,
   })
   async uploadFile(
     @UploadedFiles() files: Array<Express.Multer.File>,
     @Param('id') id: string,
     @Body() response: { data: string },
   ) {
-    const eventImagesDTO =
-      await this.eventCloudinaryService.uploadImageToCloudinary(files, id);
-
     let deleteEventImagesId = [];
+
     if (response.data) {
       deleteEventImagesId = JSON.parse(response.data).imagesToDelete;
     }
 
-    return this.eventsService.updateEventImage(
+    const eventImagesDTO =
+      await this.eventCloudinaryService.uploadImageToCloudinary(files, id);
+
+    return this.eventsImageService.updateEventImage(
       eventImagesDTO,
       deleteEventImagesId,
       +id,
@@ -123,6 +144,11 @@ export class EventsController {
     status: 401,
     type: BadRequestSwaggerUnauthorized,
     description: 'This route requires authorization to access.',
+  })
+  @ApiResponse({
+    status: 404,
+    type: BadRequestSwaggerNotFound,
+    description: 'Event not found.',
   })
   @ApiOperation({ summary: 'Get data event' })
   findOne(@Param('id') id: string) {
@@ -178,7 +204,10 @@ export class EventsController {
     type: BadRequestSwaggerNotFound,
     description: 'Event not found.',
   })
-  @ApiOperation({ summary: 'Remove an event' })
+  @ApiOperation({
+    summary:
+      'Remove an event. Delete all images from the event, and the address also is deleted in the database if not being used in another event.',
+  })
   remove(@Param('id') id: string) {
     return this.eventsService.remove(+id);
   }
