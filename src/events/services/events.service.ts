@@ -138,7 +138,7 @@ export class EventsService {
       where: {
         id,
       },
-      relations: ['images', 'address', 'address.events'],
+      relations: ['address', 'address.events'],
     });
 
     const isTheSameAddress =

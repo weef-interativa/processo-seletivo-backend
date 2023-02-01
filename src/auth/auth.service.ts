@@ -6,7 +6,7 @@ import { instanceToPlain } from 'class-transformer';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { HttpException } from '@nestjs/common/exceptions';
-import { JwtService } from '@nestjs/jwt/dist/jwt.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {

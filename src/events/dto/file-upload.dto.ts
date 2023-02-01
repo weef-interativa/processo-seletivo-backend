@@ -11,7 +11,7 @@ export class FilesUploadDto {
         'This field accepts images with JPG/JPEG/PNG and GIFT format',
     },
   })
-  files: any[];
+  files: Express.Multer.File[];
 
   @ApiPropertyOptional()
   data: CreateEventDto;

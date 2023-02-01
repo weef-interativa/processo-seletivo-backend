@@ -30,11 +30,6 @@ export class EventsAddressService {
 
       if (!eventAddress) {
         eventAddress = await this.eventAddressRepository.save(addressSent);
-      } else {
-        eventAddress = await this.eventAddressRepository.save({
-          ...addressSent,
-          id: eventToUpdate.address.id,
-        });
       }
     }
     return eventAddress;
@@ -64,7 +59,7 @@ export class EventsAddressService {
     address: Omit<EventAddress, 'createdAt' | 'updatedAt' | 'complement'>,
     eventDate: Date,
     isUpdate = false,
-  ) {
+  ): Promise<void> {
     const eventsIntThisDate = address.events.filter((event) =>
       moment(event.eventDate).isSame(eventDate, 'date'),
     );
