@@ -1,5 +1,4 @@
 import { EventAddress } from './events/entities/event_address.entity';
-import { JwtAuthGuard } from './auth/strategies/jwt-auth.guard';
 import { User } from './users/entities/user.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,21 +10,31 @@ import { EventsModule } from './events/events.module';
 import { Event } from './events/entities/event.entity';
 import { EventImage } from './events/entities/event_image.entity';
 import * as dotenv from 'dotenv';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 dotenv.config();
+
+const DB_TEST = TypeOrmModule.forRoot({
+  type: 'sqlite',
+  database: ':memory:',
+  synchronize: true,
+  entities: [User, Event, EventImage, EventAddress],
+});
+
+const DB_ORIGINAL = TypeOrmModule.forRoot({
+  type: 'postgres',
+  host: process.env.DB_HOST,
+  port: 5432,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB,
+  synchronize: true,
+  entities: [User, Event, EventImage, EventAddress],
+});
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: 5432,
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB,
-      synchronize: true,
-      entities: [User, Event, EventImage, EventAddress],
-    }),
+    process.env.NODE_ENV === 'test' ? DB_TEST : DB_ORIGINAL,
     UserModule,
     AuthModule,
     EventsModule,
